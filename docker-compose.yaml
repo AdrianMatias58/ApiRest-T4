@@ -1,0 +1,12 @@
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: cafe
+      POSTGRES_PASSWORD: "1235"
+      POSTGRES_DB: cafe_cavosh
+    volumes:
+      - volumen_cavosh:/var/lib/postgresql/data
+      - ./script-init:/docker-entrypoint-initdb.d
+volumes:
+  volumen_cavosh:
