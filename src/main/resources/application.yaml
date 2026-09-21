@@ -1,3 +1,9 @@
 spring:
   application:
     name: cafecavosh
+  jwt:
+    secret: CAMBIA_ESTO_POR_UNA_CLAVE_BASE64_DE_AL_MENOS_256_BITS
+    access-token:
+      expiration-ms: 900000
+    refresh-token:
+      expiration-ms: 1209600000  # 14 días

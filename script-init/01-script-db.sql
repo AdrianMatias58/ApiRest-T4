@@ -24,7 +24,7 @@ CREATE TABLE usuario (
                          nombre          VARCHAR(150) NOT NULL,
                          correo          VARCHAR(150) NOT NULL UNIQUE,
                          password        VARCHAR(255) NOT NULL,          -- se guarda el hash (bcrypt/argon2)
-                         validado        BOOLEAN NOT NULL DEFAULT FALSE,
+                         validado        BOOLEAN NULL DEFAULT FALSE,
                          creado_en       TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
