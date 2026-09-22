@@ -1,31 +1,33 @@
-# Etapa 1: Compilar el proyecto con Gradle
-FROM eclipse-temurin:21-jdk-alpine AS build
+# --- Etapa 1: Construcción (Build) ---
+FROM eclipse-temurin:21-jdk-alpine AS builder
 WORKDIR /app
 
-# Copiar archivos de configuración de Gradle para aprovechar la caché de Docker
+# Copiar archivos de configuración de Gradle
 COPY gradlew .
 COPY gradle gradle
 COPY build.gradle settings.gradle ./
 
-# Dar permisos de ejecución al script de Gradle
+# Dar permisos de ejecución al script gradlew
 RUN chmod +x gradlew
 
-# Descargar dependencias
-RUN ./gradlew dependencies --no-daemon
-
-# Copiar el código fuente y compilar el JAR
+# Copiar el código fuente
 COPY src src
-RUN ./gradlew bootJar --no-daemon -x test
 
-# Etapa 2: Imagen liviana para ejecutar la aplicación
+# Compilar omitiendo las pruebas unitarias
+RUN ./gradlew build -x test --no-daemon
+
+# --- Etapa 2: Imagen final de ejecución (Runtime) ---
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
-# Copiar el ejecutable generado desde la etapa de compilación
-COPY --from=build /app/build/libs/*.jar app.jar
+# Copiar únicamente el archivo JAR generado desde la etapa de compilación
+COPY --from=builder /app/build/libs/*.jar app.jar
 
 # Exponer el puerto por defecto de Spring Boot
 EXPOSE 8080
 
-# Comando para ejecutar la aplicación
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Variables de entorno por defecto (puedes sobrescribirlas al correr el contenedor)
+ENV JAVA_OPTS=""
+
+# Comando para arrancar la aplicación
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]

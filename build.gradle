@@ -1,6 +1,6 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '4.1.1'
+	id 'org.springframework.boot' version '3.4.3'
 	id 'io.spring.dependency-management' version '1.1.7'
 }
 
@@ -18,42 +18,40 @@ repositories {
 }
 
 dependencies {
-
-	// Spring Boot Starter Mail
+	// Spring Boot Starters
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
-
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-webmvc'
-	//validaciones
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-
-	// Spring Boot Starter Security
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	// Dependencias JWT (JJWT)
+	// JWT (JJWT)
 	implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
-
-	// Dependencias de MapStruct
-	implementation 'org.mapstruct:mapstruct:1.6.3'
-
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
 
+	// MapStruct
+	implementation 'org.mapstruct:mapstruct:1.6.3'
+
+	// Lombok
 	compileOnly 'org.projectlombok:lombok'
+
+	// Database & Tools
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	runtimeOnly 'org.postgresql:postgresql'
+	runtimeOnly 'org.postgresql:postgresql:42.7.5'
 
-	// Orden importa: mapstruct-processor
-	annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'
-	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+	// Processors (Lombok PRIMERO, luego Binding, luego MapStruct)
 	annotationProcessor 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'
 
-	testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'
-	testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
+	// Testing
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
 	testCompileOnly 'org.projectlombok:lombok'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	testAnnotationProcessor 'org.projectlombok:lombok'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 tasks.named('test') {

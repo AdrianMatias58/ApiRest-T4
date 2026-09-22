@@ -1,7 +1,7 @@
 package com.entregable.cafecavosh.common.advice;
 
 import com.entregable.cafecavosh.common.response.ApiResponse;
-import org.jspecify.annotations.Nullable;
+import jakarta.annotation.Nullable;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
