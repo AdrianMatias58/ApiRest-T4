@@ -2,8 +2,6 @@ package com.entregable.cafecavosh.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,9 +33,8 @@ public class Usuario {
     @Column(nullable = false)
     private Boolean validado;
 
-    @Column(name = "creado_en", nullable = false)
-    private LocalDateTime creadoEn;
-
+    @Column(name = "codigo_verificacion")
+    private String codigoValidacion;
     @Builder.Default
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
     private List<Token> tokens = new ArrayList<>();

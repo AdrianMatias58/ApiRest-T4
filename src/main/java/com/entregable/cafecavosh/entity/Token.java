@@ -2,6 +2,7 @@ package com.entregable.cafecavosh.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -41,6 +42,6 @@ public class Token {
     @Column(nullable = false)
     private Boolean revocado;
 
-    @Column(name = "creado_en", nullable = false)
+    @Column(name = "creado_en",insertable = false, nullable = false)
     private Date creadoEn;
 }

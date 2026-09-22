@@ -8,8 +8,9 @@ import java.util.Optional;
 public interface UsuarioRepositori extends JpaRepository<Usuario,Long> {
 
     // Metodo para LOGIN y la carga de UserDetails en Spring Security
-    Optional<Usuario> findByEmail(String email);
+    Optional<Usuario> findByCorreo(String email);
+    //obtener corroe mediante codigo y correo
+    Optional<Usuario> findByCorreoAndCodigoValidacion(String correo, String codigoValidacion);    // Metodo de verificación para REGISTER (evita duplicados)
+    boolean existsByCorreo(String email);
 
-    // Metodo de verificación para REGISTER (evita duplicados)
-    boolean existsByEmail(String email);
 }

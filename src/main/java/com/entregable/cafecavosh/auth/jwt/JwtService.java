@@ -45,7 +45,20 @@ public class JwtService {
         Claims claims = extraerAllClaim(token);
         return  claims.getExpiration();
     }
-
+    public Boolean tokenValido (String refreshToken){
+        try {
+            Claims claims = extraerAllClaim(refreshToken);
+            return claims.getExpiration().after(new Date());
+        } catch (Exception e) {
+            // Si el token fue manipulado, expiró al parsearlo o no es válido,
+            // extraerAllClaim lanzará una excepción (ej: ExpiredJwtException, SignatureException)
+            return false;
+        }
+    }
+    public String extraerCorreo(String token){
+        Claims claims = extraerAllClaim(token);
+        return claims.getSubject();
+    }
     private Claims extraerAllClaim(String token){
         return Jwts.parser()
                 .verifyWith(getSecretKey())

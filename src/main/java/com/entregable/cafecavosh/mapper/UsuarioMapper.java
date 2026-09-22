@@ -10,9 +10,11 @@ import org.mapstruct.Mapping;
 @Mapper(config = MapperConfig.class)
 public interface UsuarioMapper {
     //Mapper de LoginResponse con token
-    LoginResponse toLoginResponse(Usuario usuario, Token token);
-    //Mapper de Registro con token
     @Mapping(target = "token" , source ="token" )
+    @Mapping(target = "refreshToken", source = "refresToken")
+    LoginResponse toLoginResponse(Usuario usuario, String token,String refresToken);
+    //Mapper de Registro con token
+    @Mapping(target = "token", source = "token")
     @Mapping(target = "refreshToken", source = "refresToken")
     RegistroResponse toRegistroResponse(Usuario usuario, String token, String refresToken);
 }

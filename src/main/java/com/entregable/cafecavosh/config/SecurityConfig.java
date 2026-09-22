@@ -1,0 +1,44 @@
+package com.entregable.cafecavosh.config;
+
+import com.entregable.cafecavosh.auth.jwt.JwtAuthenticationEntryPoint;
+import com.entregable.cafecavosh.auth.jwt.JwtAuthtenticationFilter;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+@Configuration
+@EnableWebSecurity
+@RequiredArgsConstructor
+public class SecurityConfig {
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtAuthtenticationFilter jwtAuthtenticationFilter;
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws  Exception
+    {
+        http
+                .csrf(AbstractHttpConfigurer:: disable )
+                .authorizeHttpRequests(auth ->
+                        auth
+                        .requestMatchers("/api/v1/auth/**").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .sessionManagement(session->
+                        session
+                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .exceptionHandling( ex ->
+                        ex
+                                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                )
+                .addFilterBefore(jwtAuthtenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        return http.build();
+    }
+
+}

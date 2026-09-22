@@ -3,30 +3,21 @@
 -- Modelo: Usuarios, Autenticación JWT (Access stateless + Refresh en BD),
 --         Categorías, Productos, Locales, Pedidos y Detalle de Pedido
 -- =====================================================================
--- Decisiones tomadas según cuestionario:
---   * usuario -> token: 1 a muchos (multi-dispositivo)
---   * pedido -> usuario / pedido -> local: FK simples, sin CASCADE ni
---     RESTRICT explícito (la API es solo de cara al usuario, no maneja
---     borrado administrativo de usuarios/locales)
---   * producto -> categoria: obligatorio (NOT NULL)
---   * Tokens: Access Token JWT stateless (NO se guarda en BD) +
---     Refresh Token persistido y hasheado en la tabla "token"
--- =====================================================================
-
--- Extensión útil para generar UUIDs si se prefieren en vez de SERIAL
--- CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
 -- =====================================================================
 -- TABLA: usuario
 -- =====================================================================
 CREATE TABLE usuario (
-                         id_usuario      BIGSERIAL PRIMARY KEY,
-                         nombre          VARCHAR(150) NOT NULL,
-                         correo          VARCHAR(150) NOT NULL UNIQUE,
-                         password        VARCHAR(255) NOT NULL,          -- se guarda el hash (bcrypt/argon2)
-                         validado        BOOLEAN NULL DEFAULT FALSE,
-                         creado_en       TIMESTAMP NOT NULL DEFAULT NOW()
+                         id_usuario          BIGSERIAL PRIMARY KEY,
+                         nombre              VARCHAR(150) NOT NULL,
+                         correo              VARCHAR(150) NOT NULL UNIQUE,
+                         password            VARCHAR(255) NOT NULL,
+                         validado            BOOLEAN NOT NULL DEFAULT FALSE,
+                         codigo_verificacion VARCHAR(10) NULL,
+                         creado_en           TIMESTAMP NOT NULL DEFAULT NOW()
 );
+
+CREATE INDEX idx_usuario_codigo_verificacion ON usuario(codigo_verificacion);
 
 -- =====================================================================
 -- TABLA: token
